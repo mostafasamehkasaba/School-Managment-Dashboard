@@ -1,4 +1,8 @@
-const menuItems = [
+import { role } from "@/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+
+export const MenuItems = [
   {
     title: "MENU",
     items: [
@@ -11,13 +15,13 @@ const menuItems = [
       {
         icon: "/teacher.png",
         label: "Teachers",
-        href: "/list/teachers",
+        href: "/teacher",
         visible: ["admin", "teacher"],
       },
       {
         icon: "/student.png",
         label: "Students",
-        href: "/list/students",
+        href: "/students",
         visible: ["admin", "teacher"],
       },
       {
@@ -59,7 +63,7 @@ const menuItems = [
       {
         icon: "/result.png",
         label: "Results",
-        href: "/list/results",
+        href: "/results",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {
@@ -112,3 +116,43 @@ const menuItems = [
     ],
   },
 ];
+
+export const Menu = () => {
+  return (
+    <div className="mt-2 flex flex-col gap-5 text-sm">
+      {MenuItems.map((group) => (
+        <div className="flex flex-col gap-1" key={group.title}>
+          <span className="hidden lg:block text-slate-400 font-medium uppercase tracking-wider text-[11px] px-2.5 mb-1.5">
+            {group.title}
+          </span>
+
+          {group.items.map((item) => {
+            if (item.visible.includes(role)) {
+              return (
+                <Link
+                  href={item.href}
+                  key={item.label}
+                  className="flex items-center justify-center lg:justify-start gap-3 text-slate-600 py-2.5 px-3 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors duration-150"
+                >
+                  <div className="p-1 rounded bg-white">
+                    <Image
+                      src={item.icon}
+                      alt={item.label}
+                      width={17}
+                      height={17}
+                      className="opacity-70 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+
+                  <span className="hidden lg:block font-normal text-sm text-slate-700">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            }
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
