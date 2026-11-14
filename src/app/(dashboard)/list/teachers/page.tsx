@@ -2,6 +2,7 @@ import FormModal from "@/components/FormModel";
 import Pagination from "@/components/Pagenation"
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
+import { filterByQuery } from "@/lib/search";
 import { role, teachersData } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +55,14 @@ const columns = [
   },
 ];
 
-const TeacherListPage = () => {
+export const instant = false;
+
+const TeacherListPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string | string[] }>;
+}) => {
+  const q = (await searchParams).q;
   const renderRow = (item: Teacher) => (
     <tr
       key={item.id}
@@ -120,7 +128,7 @@ const TeacherListPage = () => {
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={teachersData} />
+      <Table columns={columns} renderRow={renderRow} data={filterByQuery(teachersData, q)} />
       {/* PAGINATION */}
       <Pagination />
     </div>
