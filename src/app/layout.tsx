@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
-
-// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
-// Remove this opt-out after verifying the segment passes validation without it.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
+import { Suspense } from "react"; // 1. استيراد Suspense
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {/* 2. تغليف الـ children داخل Suspense */}
+        <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+          {children}
+        </Suspense>
+      </body>
     </html>
   );
 }
